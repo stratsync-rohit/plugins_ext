@@ -1,0 +1,24 @@
+body{font-family:Inter, Arial, sans-serif; margin:0; padding:10px; width:520px; background:#fff; color:#111}
+.app h2{margin:0 0 8px 0}
+.search{display:flex; gap:8px; margin-top:8px}
+.search input{flex:1; padding:8px; border:1px solid #ddd; border-radius:6px}
+.search button{padding:8px 10px; border:none; background:#111; color:#fff; border-radius:6px; cursor:pointer}
+.results-section, .saved-section{margin-top:12px}
+.result, .saved-item{padding:8px; background:#f7f7f7; border-radius:6px; margin-top:8px; display:flex; gap:8px; align-items:flex-start}
+.result .meta, .saved-item .meta{flex:1}
+.result a{font-weight:600; text-decoration:none; color:#0b57d0}
+.result{cursor:default}
+.result .meta a{cursor:pointer}
+.small{font-size:12px; color:#555}
+.btn{background:#111;color:#fff;padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+.btn.small{padding:4px 6px;font-size:12px}
+.actions{display:flex; gap:6px}
+.editable{width:100%; padding:6px; border:1px solid #ddd; border-radius:6px; margin-top:4px}
+.current-tab { background:#f7f2e9; padding:8px; border-radius:6px; margin-bottom:8px; }
+.current-tab .small { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Preview pane */
+.preview-header{display:flex; align-items:center}
+#previewContainer{background:#fff;}
+#previewFrame{width:100%;}
+.preview-header{display:flex; align-items:center}

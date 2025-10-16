@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search & Save</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+   
+
+    <div class="search">
+      <input id="query" placeholder="Search or type URL..." />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div>
+      <button id="toggleSettings" class="btn small">⚙️ Settings</button>
+    </div>
+
+    <div id="settings" style="display:none; margin-top:8px;">
+      <div class="small"> Add your Google API Key & Search Engine ID (CX)</div>
+      <input id="gKey" placeholder="Google API Key" />
+      <input id="gCx" placeholder="Search Engine ID (cx)" />
+      <button id="saveSettings" class="btn small">Save</button>
+      <button id="clearSettings" class="btn small">Clear</button>
+    </div>
+
+    <div class="results-section">
+      <h3>Results</h3>
+      <div id="results"></div>
+
+      <!-- Preview pane: shown when user clicks a result to load inside the popup -->
+      <div id="previewContainer" style="display:none; margin-top:8px;">
+        <div class="preview-header">
+          <div style="display:flex; gap:8px; align-items:center; width:100%;">
+            <button id="closePreview" class="btn small">Close</button>
+            <button id="openPreviewTab" class="btn small">Open in tab</button>
+            <div id="previewUrl" class="small" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-left:6px"></div>
+          </div>
+        </div>
+        <iframe id="previewFrame" src="" frameborder="0" sandbox="allow-scripts allow-same-origin" style="width:100%; height:300px; border-radius:6px; border:1px solid #ddd; margin-top:6px"></iframe>
+      </div>
+    </div>
+
+    <div class="saved-section">
+      <h3>Saved</h3>
+      <div id="savedList"></div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
