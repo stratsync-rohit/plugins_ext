@@ -68,8 +68,12 @@ async function doSearch(){
   RESULTS_EL.innerHTML = '<div class="small">Searching...</div>';
 
   const cfg = (await chrome.storage.local.get(CONFIG_KEY))[CONFIG_KEY] || {};
-  const googleKey = cfg.googleKey;
-  const googleCx = cfg.googleCx;
+  // const googleKey = cfg.googleKey;
+  // const googleCx = cfg.googleCx;
+
+
+   const googleKey = "AIzaSyDJwNa1dfN_xbLVySIuhVces8JqBBl3dXU";
+  const googleCx = "a10d71a25954a4347 ";
 
   try {
     let data;
