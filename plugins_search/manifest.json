@@ -1,23 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "Strat",
+  "name": "Search & Save Popup",
   "version": "1.0",
-  "description": "Search the web, view results in popup, and save URLs including the one currently open.",
+  "description": "Search the web from popup, view results in popup, save/edit/delete items.",
   "action": {
-    "default_popup": "popup.html",
+    "default_title": "Search & Save",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"
     }
   },
-  "permissions": ["storage", "tabs", "activeTab"],
-  "background": {
-    "service_worker": "service_worker.js"
-  },
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["storage","notifications","tabs"],
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "128": "icons/icon48.png"
   }
 }

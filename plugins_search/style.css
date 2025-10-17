@@ -1,24 +1,177 @@
-body{font-family:Inter, Arial, sans-serif; margin:0; padding:10px; width:520px; background:#fff; color:#111}
-.app h2{margin:0 0 8px 0}
-.search{display:flex; gap:8px; margin-top:8px}
-.search input{flex:1; padding:8px; border:1px solid #ddd; border-radius:6px}
-.search button{padding:8px 10px; border:none; background:#111; color:#fff; border-radius:6px; cursor:pointer}
-.results-section, .saved-section{margin-top:12px}
-.result, .saved-item{padding:8px; background:#f7f7f7; border-radius:6px; margin-top:8px; display:flex; gap:8px; align-items:flex-start}
-.result .meta, .saved-item .meta{flex:1}
-.result a{font-weight:600; text-decoration:none; color:#0b57d0}
-.result{cursor:default}
-.result .meta a{cursor:pointer}
-.small{font-size:12px; color:#555}
-.btn{background:#111;color:#fff;padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
-.btn.small{padding:4px 6px;font-size:12px}
-.actions{display:flex; gap:6px}
-.editable{width:100%; padding:6px; border:1px solid #ddd; border-radius:6px; margin-top:4px}
-.current-tab { background:#f7f2e9; padding:8px; border-radius:6px; margin-bottom:8px; }
-.current-tab .small { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* -------- Base Styles -------- */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 16px;
+  width: 480px;
+  background: #f9fafb;
+  color: #111;
+  line-height: 1.5;
+  border-radius: 40px;
+}
 
-/* Preview pane */
-.preview-header{display:flex; align-items:center}
-#previewContainer{background:#fff;}
-#previewFrame{width:100%;}
-.preview-header{display:flex; align-items:center}
+/* -------- Layout -------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* -------- Headings -------- */
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 4px;
+}
+
+/* -------- Search Bar -------- */
+.search {
+  display: flex;
+  gap: 8px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.search input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.search input:focus {
+  border-color: #c3c7d0;
+  box-shadow: 0 0 0 2px rgba(107,114,128,0.12); /* softened grey focus */
+}
+
+.search button {
+  padding: 10px 14px;
+  background: rgb(246, 243, 243);
+  border: none;
+  color: #111;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.search button:hover {
+  background: #c3c7d0;
+}
+
+/* -------- Buttons -------- */
+.btn {
+  background: white;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #555;
+}
+
+.btn.small {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+/* -------- Settings Section -------- */
+#settings {
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  display: none;
+}
+
+#settings input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+/* -------- Result Cards -------- */
+.result, .saved-item {
+  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.result:hover, .saved-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(174, 172, 172, 0.08);
+}
+
+.result a {
+  font-weight: 600;
+  text-decoration: none;
+  color: #374151; /* dark grey instead of blue */
+}
+
+.result a:hover {
+  text-decoration: underline;
+}
+
+/* -------- Preview -------- */
+#previewContainer {
+  background: #fff;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+#previewFrame {
+  width: 100%;
+  height: 320px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-top: 6px;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* -------- Utilities -------- */
+.small {
+  font-size: 12px;
+  color: #555;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.editable {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+}
