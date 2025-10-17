@@ -18,7 +18,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   }
 });
 
-// Open the UI as a new tab when the extension icon is clicked (replaces popup)
+
 chrome.action.onClicked.addListener(async () => {
   try {
     const url = chrome.runtime.getURL('popup.html');

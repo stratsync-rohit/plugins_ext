@@ -21,27 +21,20 @@ let PREVIEW_OPEN_TITLE = '';
 const STORAGE_KEY = 'saved_items_v1';
 const CONFIG_KEY = 'local_config_v1';
 
-// Normalize URLs for dedupe: remove fragments, common tracking params, lowercase host, remove trailing slash
 function normalizeUrl(raw){
   try{
     const u = new URL(raw);
-    // remove fragment
     u.hash = '';
-    // filter out common tracking/query params
     const params = new URLSearchParams(u.search);
     const removeKeys = [];
     for(const k of params.keys()){
       if (/^(utm_|fbclid$|gclid$|mc_eid$|mc_cid$|msclkid$)/i.test(k)) removeKeys.push(k);
     }
     removeKeys.forEach(k=>params.delete(k));
-    // sort params for stability
     const sorted = new URLSearchParams([...params.entries()].sort((a,b)=> a[0].localeCompare(b[0])));
     u.search = sorted.toString();
-    // lowercase hostname
     u.hostname = u.hostname.toLowerCase();
-    // remove default port
     if ((u.protocol === 'http:' && u.port === '80') || (u.protocol === 'https:' && u.port === '443')) u.port = '';
-    // remove trailing slash from pathname unless it's the only character
     if (u.pathname.endsWith('/') && u.pathname !== '/') u.pathname = u.pathname.replace(/\/+$/,'');
     return u.toString();
   }catch(e){
@@ -58,21 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
 SEARCH_BTN.addEventListener('click', () => doSearch());
 QUERY_INPUT.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
 
-// ====== Dynamic (debounced) search as user types ======
 let _searchDebounceTimer = null;
 const DEBOUNCE_MS = 400;
 
-// Run live search while typing, but debounce network calls.
 QUERY_INPUT.addEventListener('input', (e) => {
   const q = QUERY_INPUT.value.trim();
-  // If the query is empty, clear results and don't call APIs
   if (!q) {
     RESULTS_EL.innerHTML = '';
     if (_searchDebounceTimer) { clearTimeout(_searchDebounceTimer); _searchDebounceTimer = null; }
     return;
   }
 
-  // show lightweight searching state immediately
   RESULTS_EL.innerHTML = '<div class="small">Searching...</div>';
 
   if (_searchDebounceTimer) clearTimeout(_searchDebounceTimer);
@@ -100,7 +89,6 @@ CLEAR_SETTINGS_BTN.addEventListener('click', async ()=>{
   alert('Settings cleared.');
 });
 
-// ======== Current Tab Info ========
 async function showLastOpenedTab(){
   const res = await chrome.storage.local.get('last_opened_tab');
   const last = res.last_opened_tab;
@@ -114,7 +102,7 @@ async function showLastOpenedTab(){
   }
 }
 
-// ======== Search logic =========
+
 async function doSearch(){
   const q = QUERY_INPUT.value.trim();
   if(!q) return;
@@ -183,7 +171,7 @@ function renderDuckResults(data, q){
   }
 }
 
-// create result element
+
 function createResultEl(title, snippet, url){
   const wrap = document.createElement('div');
   wrap.className = 'result';
@@ -191,10 +179,10 @@ function createResultEl(title, snippet, url){
   meta.className = 'meta';
   const a = document.createElement('a');
   a.href = url; a.textContent = title; a.target = '_blank';
-  // prevent default navigation and open in preview iframe instead
+
   a.addEventListener('click', (e)=>{
     e.preventDefault();
-    // auto-save search results when opening
+
     openInPreview(url, title, snippet, true);
   });
   const small = document.createElement('div');
@@ -225,18 +213,16 @@ function openInPreview(url, title = '', snippet = '', autoSave = false){
   PREVIEW_CONTAINER.style.display = 'block';
   PREVIEW_OPEN_TITLE = title || '';
 
-  // Auto-save the opened result (if requested) — avoid duplicates by URL
+ 
   if(autoSave){
     addSaved({ title: title || url, url, snippet });
   }
 
-  // Clear the search input and results when user opens a URL
   QUERY_INPUT.value = '';
   RESULTS_EL.innerHTML = '';
   if (_searchDebounceTimer) { clearTimeout(_searchDebounceTimer); _searchDebounceTimer = null; }
 }
 
-// preview controls
 if(CLOSE_PREVIEW) CLOSE_PREVIEW.onclick = ()=>{
   PREVIEW_FRAME.src = 'about:blank';
   PREVIEW_CONTAINER.style.display = 'none';
@@ -245,13 +231,11 @@ if(CLOSE_PREVIEW) CLOSE_PREVIEW.onclick = ()=>{
 if(OPEN_PREVIEW_TAB) OPEN_PREVIEW_TAB.onclick = ()=>{
   const u = PREVIEW_URL.textContent;
   if(u) chrome.tabs.create({ url: u });
-  // Clear the search input and results after opening the tab
   QUERY_INPUT.value = '';
   RESULTS_EL.innerHTML = '';
   if (_searchDebounceTimer) { clearTimeout(_searchDebounceTimer); _searchDebounceTimer = null; }
 };
 
-// ======= Saved Items CRUD =======
 async function loadSaved(){
   const res = await chrome.storage.local.get(STORAGE_KEY);
   renderSaved(res[STORAGE_KEY] || []);
@@ -269,7 +253,6 @@ function renderSaved(items){
     meta.appendChild(t); meta.appendChild(u);
     const actions = document.createElement('div'); actions.className='actions';
     const openB=document.createElement('button'); openB.className='btn small'; openB.textContent='Open';
-    // opening a saved item should not auto-save again
     openB.onclick=()=>openInPreview(it.url, it.title, it.snippet || '', false);
     const delB=document.createElement('button'); delB.className='btn small'; delB.textContent='Delete';
     delB.onclick=()=>deleteSaved(idx);
@@ -282,7 +265,6 @@ function renderSaved(items){
 async function addSaved(item){
   const res = await chrome.storage.local.get(STORAGE_KEY);
   const items = res[STORAGE_KEY] || [];
-  // If title is missing or exactly the same as the URL, try to generate a nicer title
   try {
     if (!item.title || item.title === item.url) {
       const parsed = new URL(item.url);
@@ -292,14 +274,12 @@ async function addSaved(item){
       item.title = last ? `${host} — ${last}` : host;
     }
   } catch (e) {
-    // ignore URL parsing errors and keep provided title/url
-  }
+    if (!item.title) item.title = item.url;}
 
-  // compute normalized URL and dedupe by that
   const normalized = normalizeUrl(item.url || '');
   item.normalizedUrl = normalized;
   const exists = items.find(i => i.normalizedUrl === normalized || i.url === item.url);
-  if (exists) return; // already saved
+  if (exists) return;
   items.unshift(item);
   await chrome.storage.local.set({ [STORAGE_KEY]: items });
   loadSaved();
