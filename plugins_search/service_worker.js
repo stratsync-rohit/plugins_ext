@@ -17,13 +17,3 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     });
   }
 });
-
-
-chrome.action.onClicked.addListener(async () => {
-  try {
-    const url = chrome.runtime.getURL('popup.html');
-    await chrome.tabs.create({ url });
-  } catch (e) {
-    console.error('Failed to open tab for popup.html', e);
-  }
-});
